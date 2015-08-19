@@ -9,7 +9,7 @@
 <body>
     <md-tabs md-dynamic-height md-border-bottom md-center-tabs>
         <md-tab label="Stopwatch">
-            <md-content ng-controller="StopwatchController">
+            <md-content ng-controller="StopwatchController" ng-init="type = 'Stopwatch'">
                 <div layout="row" layout-wrap>
                     <div flex="60" offset="20">
                         <div layout="column">
@@ -36,6 +36,46 @@
         </md-tab>
 
         <md-tab label="Timer">
+            <md-content ng-controller="StopwatchController" ng-init="type = 'Timer'">
+                <div layout="row" layout-wrap>
+                    <div flex="60" offset="20">
+                        <div layout="column">
+                            <div layout="row">
+                                <md-button ng-disabled="started && !paused" ng-click="start()" class="md-icon-button">
+                                    <md-icon md-svg-src="assets/img/icon-play.svg" style="width: 24px; height: 24px;"></md-icon>
+                                </md-button>
+                                <md-button ng-disabled="!started || paused" ng-click="pause()" class="md-icon-button">
+                                    <md-icon md-svg-src="assets/img/icon-pause.svg" style="width: 24px; height: 24px;"></md-icon>
+                                </md-button>
+                                <md-button ng-disabled="!started" ng-click="restart()" class="md-icon-button">
+                                    <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
+                                </md-button>
+                                <md-input-container flex>
+                                    <label>Hours</label>
+                                    <input ng-disabled="started" ng-model="hours">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Minutes</label>
+                                    <input ng-disabled="started" ng-model="minutes">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Seconds</label>
+                                    <input ng-disabled="started" ng-model="seconds">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Milliseconds</label>
+                                    <input ng-disabled="started" ng-model="milliseconds">
+                                </md-input-container>
+                            </div>
+                            <!-- TO DO: fix this -->
+                            <input type="number" value="{{hours}}" readonly><br/>
+                            <input type="number" value="{{minutes}}" readonly><br/>
+                            <input type="number" value="{{seconds}}" readonly><br/>
+                            <input type="number" value="{{milliseconds}}" readonly><br/>
+                        </div>
+                    </div>
+                </div>
+            </md-content>
         </md-tab>
 
         <md-tab label="Alarm">

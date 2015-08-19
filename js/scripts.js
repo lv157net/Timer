@@ -1,7 +1,7 @@
 var app = angular.module('TimingApp', ['ngMaterial']);
 
 /**
- * Represents a stopwatch that counts down time from its creation
+ * Represents an object that performs a time-related action at a certain interval
  * @param {number} hours - The number of hours from the object's creation
  * @param {number} minutes - The number of minutes from the object's creation (counted in hours after the value reaches 60)
  * @param {number] seconds - The number of seconds from the object's creation (counted in minutes after the value reaches 60)
@@ -21,8 +21,11 @@ app.controller('StopwatchController', function($scope, $timeout) {
     $scope.milliseconds = 0;
     $scope.startTime = {};
     $scope.counter = 0;
+    $scope.initialValue = 0;
+    $scope.type = '';
     $scope.started = false;
     $scope.paused = false;
+    $scope.speedDialIsOpen = false;
 
     /**
      * Called each tick.
@@ -30,12 +33,25 @@ app.controller('StopwatchController', function($scope, $timeout) {
      */
 
     $scope.onTick = function () {
-        $scope.counter = Math.abs(new Date().getTime() - $scope.startTime);
+        if ($scope.type === 'Stopwatch') {
+            $scope.counter = Math.abs(new Date().getTime() - $scope.startTime);
+
+        }
+        else if ($scope.type === 'Timer') {
+            $scope.counter = $scope.initialValue -  Math.abs(new Date().getTime() - $scope.startTime);
+        }
+        if ($scope.counter > 0) {
+
+            ticker = $timeout($scope.onTick, 50);
+        }
+        else
+        {
+            $scope.counter = 0;
+        }
         $scope.milliseconds = $scope.counter % 1000;
         $scope.seconds = Math.floor(($scope.counter / 1000 ) % 60);
-        $scope.minutes = Math.floor(($scope.counter / (1000*60) ) % 60);
-        $scope.hours = Math.floor(($scope.counter / (1000*60*60) ));
-        ticker = $timeout($scope.onTick, 50);
+        $scope.minutes = Math.floor(($scope.counter / (1000 * 60) ) % 60);
+        $scope.hours = Math.floor(($scope.counter / (1000 * 60 * 60) ));
     };
 
     /**
@@ -55,9 +71,10 @@ app.controller('StopwatchController', function($scope, $timeout) {
             {
                 $scope.startTime = new Date().getTime();
             }
-            ticker = $timeout($scope.onTick, 50);
+            $scope.initialValue = $scope.hours * 1000 * 60 * 60 + $scope.minutes * 1000 * 60 + $scope.seconds * 1000 + $scope.milliseconds;
             $scope.started = true;
             $scope.paused = false;
+            ticker = $timeout($scope.onTick, 50);
         }
     };
 
