@@ -30,12 +30,16 @@
                                         <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
                                     </md-button>
                                 </div>
-                                <md-button class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-settings.svg" style="width: 24px; height: 24px;"></md-icon>
-                                </md-button>
-                                
+                                <md-menu>
+                                    <md-button class="md-icon-button">
+                                        <md-icon md-svg-src="assets/img/icon-settings.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    </md-button>
+                                        <md-menu-content width="4">
+                                            <input type="number" />
+                                        </md-menu-content>
+                                    </md-menu>
                             </div>
-                            <progress value="{{(counter - prevTarget) / target * 100}}" max="100" ng-class ="{blue: isBlue}"></progress>
+                            <md-progress-linear md-mode="determinate" value="{{(counter - prevTarget) / target * 100}}" ng-class ="{md-warn: isBlue}"></md-progress-linear>
                             <!-- TO DO: fix this -->
                             <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
                                 <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>

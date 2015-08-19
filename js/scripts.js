@@ -12,7 +12,7 @@ var app = angular.module('TimingApp', ['ngMaterial']);
  * @param {boolean} paused - The object's pause state (influences UI buttons)
  */
 
-app.controller('StopwatchController', function($scope, $timeout) {
+app.controller('StopwatchController', function($scope, $interval) {
     "use strict";
 
     $scope.hours = 0;
@@ -21,6 +21,7 @@ app.controller('StopwatchController', function($scope, $timeout) {
     $scope.milliseconds = 0;
     $scope.startTime = {};
     $scope.counter = 0;
+
     $scope.started = false;
     $scope.paused = false;
     $scope.target = 30000;
@@ -43,7 +44,7 @@ app.controller('StopwatchController', function($scope, $timeout) {
             $scope.target *= 2;
             $scope.isBlue = !$scope.isBlue;
         }
-        ticker = $timeout($scope.onTick, 1);
+      
     };
 
     /**
@@ -63,7 +64,7 @@ app.controller('StopwatchController', function($scope, $timeout) {
             {
                 $scope.startTime = new Date().getTime();
             }
-            ticker = $timeout($scope.onTick, 50);
+            ticker = $interval($scope.onTick, 50);
             $scope.started = true;
             $scope.paused = false;
         }
@@ -77,7 +78,7 @@ app.controller('StopwatchController', function($scope, $timeout) {
        
         if (!$scope.paused)
         {
-            $timeout.cancel(ticker);
+            $interval.cancel(ticker);
             $scope.paused = true;
         }
        
@@ -88,12 +89,12 @@ app.controller('StopwatchController', function($scope, $timeout) {
      */
 
     $scope.restart = function () {
-        $timeout.cancel(ticker);
+        $interval.cancel(ticker);
         $scope.startTime = new Date().getTime();
         $scope.counter = 0;
         $scope.target = 30000;
         $scope.isBlue = false;
         $scope.paused = false;
-        ticker = $timeout($scope.onTick, $scope.speed);
+        ticker = $interval($scope.onTick, 50);
     }
 });
