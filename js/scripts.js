@@ -23,7 +23,10 @@ app.controller('StopwatchController', function($scope, $timeout) {
     $scope.counter = 0;
     $scope.started = false;
     $scope.paused = false;
-
+    $scope.target = 30000;
+    $scope.prevTarget = 0;
+    $scope.isBlue = false;
+    
     /**
      * Called each tick.
      * Changes the counter value, then sets various timing values and repeatedly sets a timeout on itself.
@@ -34,8 +37,13 @@ app.controller('StopwatchController', function($scope, $timeout) {
         $scope.milliseconds = $scope.counter % 1000;
         $scope.seconds = Math.floor(($scope.counter / 1000 ) % 60);
         $scope.minutes = Math.floor(($scope.counter / (1000*60) ) % 60);
-        $scope.hours = Math.floor(($scope.counter / (1000*60*60) ));
-        ticker = $timeout($scope.onTick, 50);
+        $scope.hours = Math.floor(($scope.counter / (1000 * 60 * 60)));
+        if ($scope.target < $scope.counter) {
+            $scope.prevTarget = $scope.target;
+            $scope.target *= 2;
+            $scope.isBlue = !$scope.isBlue;
+        }
+        ticker = $timeout($scope.onTick, 1);
     };
 
     /**
@@ -66,11 +74,13 @@ app.controller('StopwatchController', function($scope, $timeout) {
      */
 
     $scope.pause = function () {
+       
         if (!$scope.paused)
         {
             $timeout.cancel(ticker);
             $scope.paused = true;
         }
+       
     };
 
     /**
@@ -81,6 +91,8 @@ app.controller('StopwatchController', function($scope, $timeout) {
         $timeout.cancel(ticker);
         $scope.startTime = new Date().getTime();
         $scope.counter = 0;
+        $scope.target = 30000;
+        $scope.isBlue = false;
         $scope.paused = false;
         ticker = $timeout($scope.onTick, $scope.speed);
     }

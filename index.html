@@ -4,6 +4,11 @@
 <head>
     <!-- Angular Material CSS -->
     <link rel="stylesheet" href="assets/css/angular-material.min.css">
+    <style>
+        .blue {
+            background-color: #f3f3f3;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,21 +19,34 @@
                     <div flex="60" offset="20">
                         <div layout="column">
                             <div layout="row">
-                                <md-button ng-disabled="started && !paused" ng-click="start()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-play.svg" style="width: 24px; height: 24px;"></md-icon>
+                                <div flex="95">
+                                    <md-button ng-disabled="started && !paused" ng-click="start()" class="md-icon-button">
+                                        <md-icon md-svg-src="assets/img/icon-play.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    </md-button>
+                                    <md-button ng-disabled="!started || paused" ng-click="pause()" class="md-icon-button">
+                                        <md-icon md-svg-src="assets/img/icon-pause.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    </md-button>
+                                    <md-button ng-disabled="!started" ng-click="restart()" class="md-icon-button">
+                                        <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    </md-button>
+                                </div>
+                                <md-button class="md-icon-button">
+                                    <md-icon md-svg-src="assets/img/icon-settings.svg" style="width: 24px; height: 24px;"></md-icon>
                                 </md-button>
-                                <md-button ng-disabled="!started || paused" ng-click="pause()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-pause.svg" style="width: 24px; height: 24px;"></md-icon>
-                                </md-button>
-                                <md-button ng-disabled="!started" ng-click="restart()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
-                                </md-button>
+                                
                             </div>
+                            <progress value="{{(counter - prevTarget) / target * 100}}" max="100" ng-class ="{blue: isBlue}"></progress>
                             <!-- TO DO: fix this -->
-                            <input type="number" value="{{hours}}" readonly><br/>
-                            <input type="number" value="{{minutes}}" readonly><br/>
-                            <input type="number" value="{{seconds}}" readonly><br/>
-                            <input type="number" value="{{milliseconds}}" readonly><br/>
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
+                                <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>
+                            </md-whiteframe>
+                            
+                           
+
+
+
+
+
                         </div>
                     </div>
                 </div>
