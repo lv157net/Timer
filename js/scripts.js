@@ -18,15 +18,19 @@ app.controller('StopwatchController', function($scope, $interval) {
     $scope.hours = 0;
     $scope.minutes = 0;
     $scope.seconds = 0;
+	$scope.targetHours = 0;
+	$scope.targetMinutes = 0;
+	$scope.targetSec = 30;
     $scope.milliseconds = 0;
     $scope.startTime = {};
     $scope.counter = 0;
 
     $scope.started = false;
     $scope.paused = false;
-    $scope.target = 30000;
+    $scope.target = $scope.targetSec* 1000 + $scope.targetMinutes * 60 * 1000 + $scope.targetHours * 1000 * 3600;
     $scope.prevTarget = 0;
-    $scope.isBlue = false;
+	$scope.showInput = false;
+
     
     /**
      * Called each tick.
@@ -69,6 +73,7 @@ app.controller('StopwatchController', function($scope, $interval) {
             $scope.paused = false;
         }
     };
+	
 
     /**
      * Pauses the stopwatch without resetting the counter.
@@ -83,7 +88,9 @@ app.controller('StopwatchController', function($scope, $interval) {
         }
        
     };
-
+	$scope.toggleInputs = function() {
+		$scope.showInput = !$scope.showInput;
+		}
     /**
      * Restarts the stopwatch, resetting the counter and startTime value.
      */
@@ -92,7 +99,7 @@ app.controller('StopwatchController', function($scope, $interval) {
         $interval.cancel(ticker);
         $scope.startTime = new Date().getTime();
         $scope.counter = 0;
-        $scope.target = 30000;
+        $scope.target = $scope.targetSec* 1000 + $scope.targetMinutes * 60 * 1000 + $scope.targetHours * 1000 * 3600;
         $scope.isBlue = false;
         $scope.paused = false;
         ticker = $interval($scope.onTick, 50);
