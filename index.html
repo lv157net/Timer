@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="TimingApp">
 
 <head>
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Angular Material CSS -->
+    <link rel="stylesheet" href="assets/css/angular-material.min.css">
 </head>
 
-<body>
-    <!--Import jQuery before materialize.js-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-    <a href="#" id="myButton" class="btn-flat waves-effect waves-light orange">Hi</a>
+<body ng-controller="NavbarCtrl">
+    <md-content>
+        <md-button class="md-primary">
+            Click me!
+        </md-button>
+    </md-content>
+
+    <!-- Angular Material dependencies -->
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/angular-animate.min.js"></script>
+    <script src="assets/js/angular-aria.min.js"></script>
+    <!-- Angular Material -->
+    <script src="assets/js/angular-material.min.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
 
 </html>
