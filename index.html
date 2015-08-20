@@ -4,6 +4,7 @@
 <head>
     <!-- Angular Material CSS -->
     <link rel="stylesheet" href="assets/css/angular-material.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -15,16 +16,16 @@
                         <div layout="column">
                             <div layout="row">
                                 <md-button ng-disabled="started && !paused" ng-click="start()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-play.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-play.svg"></md-icon>
                                 </md-button>
                                 <md-button ng-disabled="!started || paused" ng-click="pause()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-pause.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-pause.svg"></md-icon>
                                 </md-button>
                                 <md-button ng-disabled="!started" ng-click="restart()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-restart.svg"></md-icon>
                                 </md-button>
                             </div>
-                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
                                 <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>
                             </md-whiteframe>
                         </div>
@@ -40,13 +41,13 @@
                         <div layout="column">
                             <div layout="row">
                                 <md-button ng-disabled="started && !paused" ng-click="start()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-play.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-play.svg"></md-icon>
                                 </md-button>
                                 <md-button ng-disabled="!started || paused" ng-click="pause()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-pause.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-pause.svg"></md-icon>
                                 </md-button>
                                 <md-button ng-disabled="!started" ng-click="restart()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-restart.svg"></md-icon>
                                 </md-button>
                                 <md-input-container flex>
                                     <label>Hours</label>
@@ -66,7 +67,7 @@
                                 </md-input-container>
                             </div>
                             <md-progress-linear md-mode="determinate" value="{{100*(initialValue - counter)/initialValue}}"></md-progress-linear>
-                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
                                 <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>
                             </md-whiteframe>
                         </div>
@@ -82,13 +83,13 @@
                         <div layout="column">
                             <div layout="row">
                                 <md-button ng-disabled="started && !paused" ng-click="start()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-play.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-play.svg"></md-icon>
                                 </md-button>
                                 <md-button ng-disabled="!started || paused" ng-click="pause()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-pause.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-pause.svg"></md-icon>
                                 </md-button>
                                 <md-button ng-disabled="!started" ng-click="restart()" class="md-icon-button">
-                                    <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
+                                    <md-icon md-svg-src="assets/img/icon-restart.svg"></md-icon>
                                 </md-button>
                                 <md-input-container flex>
                                     <label>Hours</label>
@@ -108,7 +109,7 @@
                                 </md-input-container>
                             </div>
                             <md-progress-linear md-mode="determinate" value="{{100*(initialValue - counter)/initialValue}}"></md-progress-linear>
-                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
                                 <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>
                             </md-whiteframe>
                         </div>
