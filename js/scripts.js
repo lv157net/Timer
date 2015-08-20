@@ -8,24 +8,33 @@ var app = angular.module('TimingApp', ['ngMaterial']);
  * @param {number} milliseconds - The number of milliseconds from the object's creation (counted in seconds after the value reaches 1000)
  * @param {object} startTime - The Unix time at which the object was (re)started
  * @param {number} counter - The time from the object's creation
+ * @param {number} initialValue - The initial value of the counter
+ * @param {number} startTime - The time at which the object was last paused
+ * @param {string} type - The object's type ('Timer', 'Stopwatch' or 'Alarm')
  * @param {boolean} started - The object's start state (influences UI buttons)
  * @param {boolean} paused - The object's pause state (influences UI buttons)
  */
 
-app.controller('StopwatchController', function($scope, $timeout) {
+app.controller('StopwatchController', function($scope, $timeout, $mdToast) {
     "use strict";
 
     $scope.hours = 0;
     $scope.minutes = 0;
     $scope.seconds = 0;
     $scope.milliseconds = 0;
+
+    $scope.ihours = 0;
+    $scope.iminutes = 0;
+    $scope.iseconds = 0;
+    $scope.imilliseconds = 0;
+
     $scope.startTime = {};
     $scope.counter = 0;
     $scope.initialValue = 0;
+    $scope.pausedTime = {};
     $scope.type = '';
     $scope.started = false;
     $scope.paused = false;
-    $scope.speedDialIsOpen = false;
 
     /**
      * Called each tick.
@@ -33,21 +42,31 @@ app.controller('StopwatchController', function($scope, $timeout) {
      */
 
     $scope.onTick = function () {
-        if ($scope.type === 'Stopwatch') {
+        //Perform a counter change depending on the object's type
+        if ($scope.type === 'Stopwatch')
+        {
             $scope.counter = Math.abs(new Date().getTime() - $scope.startTime);
-
-        }
-        else if ($scope.type === 'Timer') {
-            $scope.counter = $scope.initialValue -  Math.abs(new Date().getTime() - $scope.startTime);
-        }
-        if ($scope.counter > 0) {
-
             ticker = $timeout($scope.onTick, 50);
         }
         else
         {
-            $scope.counter = 0;
+            $scope.counter = $scope.initialValue -  Math.abs(new Date().getTime() - $scope.startTime);
+            //Determine if the timer has stopped
+            if ($scope.counter > 0)
+            {
+                ticker = $timeout($scope.onTick, 50);
+            }
+            else
+            {
+                $scope.stop();
+                if ($scope.type === 'Alarm')
+                {
+                    $scope.showToast();
+                }
+            }
         }
+
+        // Calculate ms/s/m/h values
         $scope.milliseconds = $scope.counter % 1000;
         $scope.seconds = Math.floor(($scope.counter / 1000 ) % 60);
         $scope.minutes = Math.floor(($scope.counter / (1000 * 60) ) % 60);
@@ -61,7 +80,7 @@ app.controller('StopwatchController', function($scope, $timeout) {
     var ticker;
 
     /**
-     * Starts the stopwatch, setting the promise. If this is an initial start, sets the startTime value.
+     * Starts the object, setting the promise. If this is an initial start, sets the startTime value.
      */
 
     $scope.start = function() {
@@ -71,7 +90,18 @@ app.controller('StopwatchController', function($scope, $timeout) {
             {
                 $scope.startTime = new Date().getTime();
             }
-            $scope.initialValue = $scope.hours * 1000 * 60 * 60 + $scope.minutes * 1000 * 60 + $scope.seconds * 1000 + $scope.milliseconds;
+            else
+            {
+                if ($scope.type === 'Stopwatch')
+                {
+                    $scope.startTime = new Date().getTime() - $scope.counter;
+                }
+                else
+                {
+                    $scope.startTime += new Date().getTime() -  $scope.pausedTime;
+                }
+            }
+            $scope.initialValue = $scope.ihours * 1000 * 60 * 60 + $scope.iminutes * 1000 * 60 + $scope.iseconds * 1000 + $scope.imilliseconds;
             $scope.started = true;
             $scope.paused = false;
             ticker = $timeout($scope.onTick, 50);
@@ -79,26 +109,68 @@ app.controller('StopwatchController', function($scope, $timeout) {
     };
 
     /**
-     * Pauses the stopwatch without resetting the counter.
+     * Pauses the object without resetting the counter.
      */
 
     $scope.pause = function () {
         if (!$scope.paused)
         {
             $timeout.cancel(ticker);
+            $scope.pausedTime = new Date().getTime();
             $scope.paused = true;
         }
     };
 
     /**
-     * Restarts the stopwatch, resetting the counter and startTime value.
+     * Resets the object to the initial state
+     */
+
+    $scope.stop = function () {
+        $timeout.cancel(ticker);
+        $scope.hours = 0;
+        $scope.minutes = 0;
+        $scope.seconds = 0;
+        $scope.milliseconds = 0;
+        $scope.startTime = {};
+        $scope.counter = 0;
+        $scope.initialValue = 0;
+        $scope.pausedTime = {};
+        $scope.started = false;
+        $scope.paused = false;
+    };
+
+    /**
+     * Restarts the object, resetting the counter and startTime value.
      */
 
     $scope.restart = function () {
-        $timeout.cancel(ticker);
-        $scope.startTime = new Date().getTime();
-        $scope.counter = 0;
-        $scope.paused = false;
-        ticker = $timeout($scope.onTick, $scope.speed);
+        $scope.stop();
+        $scope.start();
+    };
+
+    /**
+     * Shows a toast! (for the Alarm object)
+     */
+
+    $scope.toastPosition = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+
+    $scope.getToastPosition = function() {
+        return Object.keys($scope.toastPosition)
+            .filter(function(pos) { return $scope.toastPosition[pos]; })
+            .join(' ');
+    };
+
+    $scope.showToast = function () {
+        $mdToast.show(
+            $mdToast.simple()
+                .content('Done with the alarm!')
+                .position($scope.getToastPosition())
+                .hideDelay(1500)
+        );
     }
 });

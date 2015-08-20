@@ -24,11 +24,9 @@
                                     <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
                                 </md-button>
                             </div>
-                            <!-- TO DO: fix this -->
-                            <input type="number" value="{{hours}}" readonly><br/>
-                            <input type="number" value="{{minutes}}" readonly><br/>
-                            <input type="number" value="{{seconds}}" readonly><br/>
-                            <input type="number" value="{{milliseconds}}" readonly><br/>
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
+                                <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>
+                            </md-whiteframe>
                         </div>
                     </div>
                 </div>
@@ -52,26 +50,25 @@
                                 </md-button>
                                 <md-input-container flex>
                                     <label>Hours</label>
-                                    <input ng-disabled="started" ng-model="hours">
+                                    <input ng-disabled="started" ng-model="ihours">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Minutes</label>
-                                    <input ng-disabled="started" ng-model="minutes">
+                                    <input ng-disabled="started" ng-model="iminutes">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Seconds</label>
-                                    <input ng-disabled="started" ng-model="seconds">
+                                    <input ng-disabled="started" ng-model="iseconds">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Milliseconds</label>
-                                    <input ng-disabled="started" ng-model="milliseconds">
+                                    <input ng-disabled="started" ng-model="imilliseconds">
                                 </md-input-container>
                             </div>
-                            <!-- TO DO: fix this -->
-                            <input type="number" value="{{hours}}" readonly><br/>
-                            <input type="number" value="{{minutes}}" readonly><br/>
-                            <input type="number" value="{{seconds}}" readonly><br/>
-                            <input type="number" value="{{milliseconds}}" readonly><br/>
+                            <md-progress-linear md-mode="determinate" value="{{100*(initialValue - counter)/initialValue}}"></md-progress-linear>
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
+                                <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>
+                            </md-whiteframe>
                         </div>
                     </div>
                 </div>
@@ -79,6 +76,45 @@
         </md-tab>
 
         <md-tab label="Alarm">
+            <md-content ng-controller="StopwatchController" ng-init="type = 'Alarm'">
+                <div layout="row" layout-wrap>
+                    <div flex="60" offset="20">
+                        <div layout="column">
+                            <div layout="row">
+                                <md-button ng-disabled="started && !paused" ng-click="start()" class="md-icon-button">
+                                    <md-icon md-svg-src="assets/img/icon-play.svg" style="width: 24px; height: 24px;"></md-icon>
+                                </md-button>
+                                <md-button ng-disabled="!started || paused" ng-click="pause()" class="md-icon-button">
+                                    <md-icon md-svg-src="assets/img/icon-pause.svg" style="width: 24px; height: 24px;"></md-icon>
+                                </md-button>
+                                <md-button ng-disabled="!started" ng-click="restart()" class="md-icon-button">
+                                    <md-icon md-svg-src="assets/img/icon-restart.svg" style="width: 24px; height: 24px;"></md-icon>
+                                </md-button>
+                                <md-input-container flex>
+                                    <label>Hours</label>
+                                    <input ng-disabled="started" ng-model="ihours">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Minutes</label>
+                                    <input ng-disabled="started" ng-model="iminutes">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Seconds</label>
+                                    <input ng-disabled="started" ng-model="iseconds">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Milliseconds</label>
+                                    <input ng-disabled="started" ng-model="imilliseconds">
+                                </md-input-container>
+                            </div>
+                            <md-progress-linear md-mode="determinate" value="{{100*(initialValue - counter)/initialValue}}"></md-progress-linear>
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row" style="padding: 10%; margin: 10px">
+                                <span flex>{{hours}} </span> <span flex>{{minutes}} </span> <span flex>{{seconds}} </span> <span flex>{{milliseconds}} </span>
+                            </md-whiteframe>
+                        </div>
+                    </div>
+                </div>
+            </md-content>
         </md-tab>
     </md-tabs>
 
