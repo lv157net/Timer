@@ -10,7 +10,7 @@
 <body>
     <md-tabs md-dynamic-height md-border-bottom md-center-tabs>
         <md-tab label="Stopwatch">
-            <md-content ng-controller="StopwatchController" ng-init="type = 'Stopwatch'">
+            <md-content ng-controller="StopwatchController">
                 <div layout="row" layout-wrap>
                     <div flex="60" offset="20">
                         <div layout="column">
@@ -35,7 +35,7 @@
         </md-tab>
 
         <md-tab label="Timer">
-            <md-content ng-controller="StopwatchController" ng-init="type = 'Timer'">
+            <md-content ng-controller="TimerController">
                 <div layout="row" layout-wrap>
                     <div flex="60" offset="20">
                         <div layout="column">
@@ -77,7 +77,7 @@
         </md-tab>
 
         <md-tab label="Alarm">
-            <md-content ng-controller="StopwatchController" ng-init="type = 'Alarm'">
+            <md-content ng-controller="AlarmController">
                 <div layout="row" layout-wrap>
                     <div flex="60" offset="20">
                         <div layout="column">
