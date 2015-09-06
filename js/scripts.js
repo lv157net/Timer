@@ -1,4 +1,4 @@
-var app = angular.module('TimingApp', ['ngMaterial']);
+var app = angular.module('TimingApp', ['ngMaterial', 'ngStorage']);
 
 /**
  * Represents a stopwatch that counts down time from its creation
@@ -14,19 +14,21 @@ var app = angular.module('TimingApp', ['ngMaterial']);
  * @param {boolean} paused - The object's pause state (influences UI buttons)
  */
 
-app.controller('StopwatchController', function($scope, $timeout) {
+app.controller('StopwatchController', function($scope, $timeout, $localStorage) {
     "use strict";
 
-    $scope.hours = 0;
-    $scope.minutes = 0;
-    $scope.seconds = 0;
-    $scope.milliseconds = 0;
-    $scope.startTime = {};
-    $scope.counter = 0;
-    $scope.initialValue = 0;
-    $scope.pausedTime = {};
-    $scope.started = false;
-    $scope.paused = false;
+    $scope.storage = $localStorage.$default({
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0,
+        startTime: {},
+        counter: 0,
+        initialValue: 0,
+        pausedTime: {},
+        started: false,
+        paused: false
+    });
 
     /**
      * Called each tick.
@@ -35,13 +37,13 @@ app.controller('StopwatchController', function($scope, $timeout) {
 
     $scope.onTick = function () {
         //Perform a counter change
-        $scope.counter = Math.abs(new Date().getTime() - $scope.startTime);
+        $scope.storage.counter = Math.abs(new Date().getTime() - $scope.storage.startTime);
         ticker = $timeout($scope.onTick, 50);
         // Calculate ms/s/m/h values
-        $scope.milliseconds = $scope.counter % 1000;
-        $scope.seconds = Math.floor(($scope.counter / 1000 ) % 60);
-        $scope.minutes = Math.floor(($scope.counter / (1000 * 60) ) % 60);
-        $scope.hours = Math.floor(($scope.counter / (1000 * 60 * 60) ));
+        $scope.storage.milliseconds = $scope.storage.counter % 1000;
+        $scope.storage.seconds = Math.floor(($scope.storage.counter / 1000 ) % 60);
+        $scope.storage.minutes = Math.floor(($scope.storage.counter / (1000 * 60) ) % 60);
+        $scope.storage.hours = Math.floor(($scope.storage.counter / (1000 * 60 * 60) ));
     };
 
     /**
@@ -55,19 +57,18 @@ app.controller('StopwatchController', function($scope, $timeout) {
      */
 
     $scope.start = function() {
-        if ($scope.paused || !$scope.started)
+        if ($scope.storage.paused || !$scope.storage.started)
         {
-            if (!$scope.started)
+            if (!$scope.storage.started)
             {
-                $scope.startTime = new Date().getTime();
+                $scope.storage.startTime = new Date().getTime();
             }
             else
             {
-                $scope.startTime = new Date().getTime() - $scope.counter;
+                $scope.storage.startTime = new Date().getTime() - $scope.storage.counter;
             }
-            $scope.initialValue = $scope.ihours * 1000 * 60 * 60 + $scope.iminutes * 1000 * 60 + $scope.iseconds * 1000 + $scope.imilliseconds;
-            $scope.started = true;
-            $scope.paused = false;
+            $scope.storage.started = true;
+            $scope.storage.paused = false;
             ticker = $timeout($scope.onTick, 50);
         }
     };
@@ -77,11 +78,11 @@ app.controller('StopwatchController', function($scope, $timeout) {
      */
 
     $scope.pause = function () {
-        if (!$scope.paused)
+        if (!$scope.storage.paused)
         {
             $timeout.cancel(ticker);
-            $scope.pausedTime = new Date().getTime();
-            $scope.paused = true;
+            $scope.storage.pausedTime = new Date().getTime();
+            $scope.storage.paused = true;
         }
     };
 
@@ -91,16 +92,16 @@ app.controller('StopwatchController', function($scope, $timeout) {
 
     $scope.stop = function () {
         $timeout.cancel(ticker);
-        $scope.hours = 0;
-        $scope.minutes = 0;
-        $scope.seconds = 0;
-        $scope.milliseconds = 0;
-        $scope.startTime = {};
-        $scope.counter = 0;
-        $scope.initialValue = 0;
-        $scope.pausedTime = {};
-        $scope.started = false;
-        $scope.paused = false;
+        $scope.storage.hours = 0;
+        $scope.storage.minutes = 0;
+        $scope.storage.seconds = 0;
+        $scope.storage.milliseconds = 0;
+        $scope.storage.startTime = {};
+        $scope.storage.counter = 0;
+        $scope.storage.initialValue = 0;
+        $scope.storage.pausedTime = {};
+        $scope.storage.started = false;
+        $scope.storage.paused = false;
     };
 
     /**
@@ -127,24 +128,26 @@ app.controller('StopwatchController', function($scope, $timeout) {
  * @param {boolean} paused - The object's pause state (influences UI buttons)
  */
 
-app.controller('TimerController', function($scope, $timeout) {
+app.controller('TimerController', function($scope, $timeout, $localStorage) {
     "use strict";
 
-    $scope.hours = 0;
-    $scope.minutes = 0;
-    $scope.seconds = 0;
-    $scope.milliseconds = 0;
-    $scope.ihours = 0;
-    $scope.iminutes = 0;
-    $scope.iseconds = 0;
-    $scope.imilliseconds = 0;
-    $scope.startTime = {};
-    $scope.counter = 0;
-    $scope.initialValue = 0;
-    $scope.pausedTime = {};
-    $scope.type = '';
-    $scope.started = false;
-    $scope.paused = false;
+    $scope.storage = $localStorage.$default({
+        timer_hours: 0,
+        timer_minutes : 0,
+        timer_seconds : 0,
+        timer_milliseconds : 0,
+        timer_ihours : 0,
+        timer_iminutes : 0,
+        timer_iseconds : 0,
+        timer_imilliseconds : 0,
+        timer_startTime : {},
+        timer_counter : 0,
+        timer_initialValue : 0,
+        timer_pausedTime : {},
+        timer_started : false,
+        timer_paused : false
+    });
+
 
     /**
      * Called each tick.
@@ -153,9 +156,9 @@ app.controller('TimerController', function($scope, $timeout) {
 
     $scope.onTick = function () {
         //Perform a counter change depending on the object's type
-        $scope.counter = $scope.initialValue -  Math.abs(new Date().getTime() - $scope.startTime);
+        $scope.storage.timer_counter = $scope.storage.timer_initialValue -  Math.abs(new Date().getTime() - $scope.storage.timer_startTime);
         //Determine if the timer has stopped
-        if ($scope.counter > 0)
+        if ($scope.storage.timer_counter > 0)
         {
             ticker = $timeout($scope.onTick, 50);
         }
@@ -164,10 +167,10 @@ app.controller('TimerController', function($scope, $timeout) {
             $scope.stop();
         }
         // Calculate ms/s/m/h values
-        $scope.milliseconds = $scope.counter % 1000;
-        $scope.seconds = Math.floor(($scope.counter / 1000 ) % 60);
-        $scope.minutes = Math.floor(($scope.counter / (1000 * 60) ) % 60);
-        $scope.hours = Math.floor(($scope.counter / (1000 * 60 * 60) ));
+        $scope.storage.timer_milliseconds = $scope.storage.timer_counter % 1000;
+        $scope.storage.timer_seconds = Math.floor(($scope.storage.timer_counter / 1000 ) % 60);
+        $scope.storage.timer_minutes = Math.floor(($scope.storage.timer_counter / (1000 * 60) ) % 60);
+        $scope.storage.timer_hours = Math.floor(($scope.storage.timer_counter / (1000 * 60 * 60) ));
     };
 
     /**
@@ -181,19 +184,19 @@ app.controller('TimerController', function($scope, $timeout) {
      */
 
     $scope.start = function() {
-        if ($scope.paused || !$scope.started)
+        if ($scope.storage.timer_paused || !$scope.storage.timer_started)
         {
-            if (!$scope.started)
+            if (!$scope.storage.timer_started)
             {
-                $scope.startTime = new Date().getTime();
+                $scope.storage.timer_startTime = new Date().getTime();
             }
             else
             {
-                $scope.startTime += new Date().getTime() -  $scope.pausedTime;
+                $scope.storage.timer_startTime += new Date().getTime() -  $scope.storage.timer_pausedTime;
             }
-            $scope.initialValue = $scope.ihours * 1000 * 60 * 60 + $scope.iminutes * 1000 * 60 + $scope.iseconds * 1000 + $scope.imilliseconds;
-            $scope.started = true;
-            $scope.paused = false;
+            $scope.storage.timer_initialValue = $scope.storage.timer_ihours * 1000 * 60 * 60 + $scope.storage.timer_iminutes * 1000 * 60 + $scope.storage.timer_iseconds * 1000 + $scope.storage.timer_imilliseconds;
+            $scope.storage.timer_started = true;
+            $scope.storage.timer_paused = false;
             ticker = $timeout($scope.onTick, 50);
         }
     };
@@ -203,11 +206,11 @@ app.controller('TimerController', function($scope, $timeout) {
      */
 
     $scope.pause = function () {
-        if (!$scope.paused)
+        if (!$scope.storage.timer_paused)
         {
             $timeout.cancel(ticker);
-            $scope.pausedTime = new Date().getTime();
-            $scope.paused = true;
+            $scope.storage.timer_pausedTime = new Date().getTime();
+            $scope.storage.timer_paused = true;
         }
     };
 
@@ -217,16 +220,16 @@ app.controller('TimerController', function($scope, $timeout) {
 
     $scope.stop = function () {
         $timeout.cancel(ticker);
-        $scope.hours = 0;
-        $scope.minutes = 0;
-        $scope.seconds = 0;
-        $scope.milliseconds = 0;
-        $scope.startTime = {};
-        $scope.counter = 0;
-        $scope.initialValue = 0;
-        $scope.pausedTime = {};
-        $scope.started = false;
-        $scope.paused = false;
+        $scope.storage.timer_hours = 0;
+        $scope.storage.timer_minutes = 0;
+        $scope.storage.timer_seconds = 0;
+        $scope.storage.timer_milliseconds = 0;
+        $scope.storage.timer_startTime = {};
+        $scope.storage.timer_counter = 0;
+        $scope.storage.timer_initialValue = 0;
+        $scope.storage.timer_pausedTime = {};
+        $scope.storage.timer_started = false;
+        $scope.storage.timer_paused = false;
     };
 
     /**
@@ -253,23 +256,25 @@ app.controller('TimerController', function($scope, $timeout) {
  * @param {boolean} paused - The object's pause state (influences UI buttons)
  */
 
-app.controller('AlarmController', function($scope, $timeout, $mdToast) {
-    "use strict";
+app.controller('AlarmController', function($scope, $timeout, $localStorage, $mdToast) {
 
-    $scope.hours = 0;
-    $scope.minutes = 0;
-    $scope.seconds = 0;
-    $scope.milliseconds = 0;
-    $scope.ihours = 0;
-    $scope.iminutes = 0;
-    $scope.iseconds = 0;
-    $scope.imilliseconds = 0;
-    $scope.startTime = {};
-    $scope.counter = 0;
-    $scope.initialValue = 0;
-    $scope.pausedTime = {};
-    $scope.started = false;
-    $scope.paused = false;
+    $scope.storage = $localStorage.$default({
+        alarm_hours: 0,
+        alarm_minutes : 0,
+        alarm_seconds : 0,
+        alarm_milliseconds : 0,
+        alarm_ihours : 0,
+        alarm_iminutes : 0,
+        alarm_iseconds : 0,
+        alarm_imilliseconds : 0,
+        alarm_startTime : {},
+        alarm_counter : 0,
+        alarm_initialValue : 0,
+        alarm_pausedTime : {},
+        alarm_started : false,
+        alarm_paused : false
+    });
+
 
     /**
      * Called each tick.
@@ -278,9 +283,9 @@ app.controller('AlarmController', function($scope, $timeout, $mdToast) {
 
     $scope.onTick = function () {
         //Perform a counter change depending on the object's type
-        $scope.counter = $scope.initialValue -  Math.abs(new Date().getTime() - $scope.startTime);
-        //Determine if the timer has stopped
-        if ($scope.counter > 0)
+        $scope.storage.alarm_counter = $scope.storage.alarm_initialValue -  Math.abs(new Date().getTime() - $scope.storage.alarm_startTime);
+        //Determine if the alarm has stopped
+        if ($scope.storage.alarm_counter > 0)
         {
             ticker = $timeout($scope.onTick, 50);
         }
@@ -289,12 +294,11 @@ app.controller('AlarmController', function($scope, $timeout, $mdToast) {
             $scope.stop();
             $scope.showToast();
         }
-
         // Calculate ms/s/m/h values
-        $scope.milliseconds = $scope.counter % 1000;
-        $scope.seconds = Math.floor(($scope.counter / 1000 ) % 60);
-        $scope.minutes = Math.floor(($scope.counter / (1000 * 60) ) % 60);
-        $scope.hours = Math.floor(($scope.counter / (1000 * 60 * 60) ));
+        $scope.storage.alarm_milliseconds = $scope.storage.alarm_counter % 1000;
+        $scope.storage.alarm_seconds = Math.floor(($scope.storage.alarm_counter / 1000 ) % 60);
+        $scope.storage.alarm_minutes = Math.floor(($scope.storage.alarm_counter / (1000 * 60) ) % 60);
+        $scope.storage.alarm_hours = Math.floor(($scope.storage.alarm_counter / (1000 * 60 * 60) ));
     };
 
     /**
@@ -308,19 +312,19 @@ app.controller('AlarmController', function($scope, $timeout, $mdToast) {
      */
 
     $scope.start = function() {
-        if ($scope.paused || !$scope.started)
+        if ($scope.storage.alarm_paused || !$scope.storage.alarm_started)
         {
-            if (!$scope.started)
+            if (!$scope.storage.alarm_started)
             {
-                $scope.startTime = new Date().getTime();
+                $scope.storage.alarm_startTime = new Date().getTime();
             }
             else
             {
-                $scope.startTime += new Date().getTime() -  $scope.pausedTime;
+                $scope.storage.alarm_startTime += new Date().getTime() -  $scope.storage.alarm_pausedTime;
             }
-            $scope.initialValue = $scope.ihours * 1000 * 60 * 60 + $scope.iminutes * 1000 * 60 + $scope.iseconds * 1000 + $scope.imilliseconds;
-            $scope.started = true;
-            $scope.paused = false;
+            $scope.storage.alarm_initialValue = $scope.storage.alarm_ihours * 1000 * 60 * 60 + $scope.storage.alarm_iminutes * 1000 * 60 + $scope.storage.alarm_iseconds * 1000 + $scope.storage.alarm_imilliseconds;
+            $scope.storage.alarm_started = true;
+            $scope.storage.alarm_paused = false;
             ticker = $timeout($scope.onTick, 50);
         }
     };
@@ -330,11 +334,11 @@ app.controller('AlarmController', function($scope, $timeout, $mdToast) {
      */
 
     $scope.pause = function () {
-        if (!$scope.paused)
+        if (!$scope.storage.alarm_paused)
         {
             $timeout.cancel(ticker);
-            $scope.pausedTime = new Date().getTime();
-            $scope.paused = true;
+            $scope.storage.alarm_pausedTime = new Date().getTime();
+            $scope.storage.alarm_paused = true;
         }
     };
 
@@ -344,16 +348,16 @@ app.controller('AlarmController', function($scope, $timeout, $mdToast) {
 
     $scope.stop = function () {
         $timeout.cancel(ticker);
-        $scope.hours = 0;
-        $scope.minutes = 0;
-        $scope.seconds = 0;
-        $scope.milliseconds = 0;
-        $scope.startTime = {};
-        $scope.counter = 0;
-        $scope.initialValue = 0;
-        $scope.pausedTime = {};
-        $scope.started = false;
-        $scope.paused = false;
+        $scope.storage.alarm_hours = 0;
+        $scope.storage.alarm_minutes = 0;
+        $scope.storage.alarm_seconds = 0;
+        $scope.storage.alarm_milliseconds = 0;
+        $scope.storage.alarm_startTime = {};
+        $scope.storage.alarm_counter = 0;
+        $scope.storage.alarm_initialValue = 0;
+        $scope.storage.alarm_pausedTime = {};
+        $scope.storage.alarm_started = false;
+        $scope.storage.alarm_paused = false;
     };
 
     /**
@@ -363,17 +367,6 @@ app.controller('AlarmController', function($scope, $timeout, $mdToast) {
     $scope.restart = function () {
         $scope.stop();
         $scope.start();
-    };
-
-    /**
-     * Shows a toast!
-     */
-
-    $scope.toastPosition = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
     };
 
     $scope.getToastPosition = function() {
