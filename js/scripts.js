@@ -275,7 +275,13 @@ app.controller('AlarmController', function($scope, $timeout, $localStorage, $mdT
         alarm_paused : false
     });
 
-
+    $scope.toastPosition = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+    
     /**
      * Called each tick.
      * Changes the counter value, then sets various timing values and repeatedly sets a timeout on itself.
