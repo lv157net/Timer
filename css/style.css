@@ -9,3 +9,6 @@ md-icon
     height: 30px;
     width: 30px;
 }
+.timer-holder>span {
+    font-size: 45px;
+}

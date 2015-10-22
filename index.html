@@ -25,7 +25,7 @@
                                     <md-icon md-svg-src="assets/img/icon-restart.svg"></md-icon>
                                 </md-button>
                             </div>
-                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5 timer-holder" layout="row">
                                 <span flex>{{stopwatch.storage.stopwatch_hours}} </span>
                                 <span flex>{{stopwatch.storage.stopwatch_minutes}} </span>
                                 <span flex>{{stopwatch.storage.stopwatch_seconds}} </span>
@@ -64,13 +64,9 @@
                                     <label>Seconds</label>
                                     <input ng-disabled="timing.storage.timer_started" ng-model="timing.storage.timer_iseconds">
                                 </md-input-container>
-                                <md-input-container flex>
-                                    <label>Milliseconds</label>
-                                    <input ng-disabled="timing.storage.timer_started" ng-model="timing.storage.timer_imilliseconds">
-                                </md-input-container>
                             </div>
                             <md-progress-linear md-mode="determinate" value="{{100*(timing.storage.timer_initialValue - timing.storage.timer_counter)/timing.storage.timer_initialValue}}"></md-progress-linear>
-                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5 timer-holder" layout="row">
                                 <span flex>{{timing.storage.timer_hours}} </span>
                                 <span flex>{{timing.storage.timer_minutes}} </span>
                                 <span flex>{{timing.storage.timer_seconds}} </span>
@@ -109,14 +105,10 @@
                                     <label>Seconds</label>
                                     <input ng-disabled="alarm.storage.alarm_started" ng-model="alarm.storage.alarm_iseconds">
                                 </md-input-container>
-                                <md-input-container flex>
-                                    <label>Milliseconds</label>
-                                    <input ng-disabled="alarm.storage.alarm_started" ng-model="alarm.storage.alarm_imilliseconds">
-                                </md-input-container>
                             </div>
                             <md-progress-linear md-mode="determinate" value="{{100*(alarm.storage.alarm_initialValue - alarm.storage.alarm_counter)/alarm.storage.alarm_initialValue}}"></md-progress-linear>
-                            <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
-                                <span flex>{{alarm.storage.alarm_hours}} </span>
+                            <md-whiteframe class="md-display-2 md-whiteframe-z5 timer-holder" layout="row">
+                                <span flex >{{alarm.storage.alarm_hours}} </span>
                                 <span flex>{{alarm.storage.alarm_minutes}} </span>
                                 <span flex>{{alarm.storage.alarm_seconds}} </span>
                                 <span flex>{{alarm.storage.alarm_milliseconds}} </span>

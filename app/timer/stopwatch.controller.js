@@ -21,9 +21,9 @@
         .module('TimingApp')
         .controller('StopwatchController', StopwatchController);
 
-    StopwatchController.$inject = ['$timeout', '$localStorage', 'timeConsts', 'settings'];
+    StopwatchController.$inject = ['$scope', '$timeout', '$localStorage', 'timeConsts', 'settings'];
 
-    function StopwatchController ($timeout, $localStorage, timeConsts, settings) {
+    function StopwatchController ($scope, $timeout, $localStorage, timeConsts, settings) {
         var vm = this;
         var ticker;
         vm.start = start;
@@ -54,6 +54,8 @@
             if(vm.storage.stopwatch_started && !vm.storage.stopwatch_paused) {
                 onTick();
             }
+
+            $scope.$on('$destroy', destroyHandler);
          }
 
         function isPauseDisabled() {
@@ -124,5 +126,9 @@
         function restart() {
             vm.stop();
             vm.start();
+        }
+
+        function destroyHandler() {
+            $timeout.cancel(ticker);
         }
 }})();

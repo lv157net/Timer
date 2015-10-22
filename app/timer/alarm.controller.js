@@ -21,9 +21,9 @@
         .module('TimingApp')
         .controller('AlarmController', AlarmController);
 
-    AlarmController.$inject = ['$timeout', '$localStorage', '$mdToast', 'timeConsts','settings'];
+    AlarmController.$inject = ['$scope', '$timeout', '$localStorage', '$mdToast', 'timeConsts','settings'];
 
-    function AlarmController($timeout, $localStorage, $mdToast, timeConsts, settings) {
+    function AlarmController($scope, $timeout, $localStorage, $mdToast, timeConsts, settings) {
         var vm = this;
         var ticker;
         vm.onTick = onTick;
@@ -68,7 +68,7 @@
                 onTick();
             }
 
-            onTick();
+            $scope.$on('$destroy', destroyHandler);
         }
 
         function isPauseDisabled() {
@@ -165,6 +165,10 @@
                     .position(vm.getToastPosition())
                     .hideDelay(settings.TOASTR_DELAY)
             );
+        }
+
+        function destroyHandler() {
+            $timeout.cancel(ticker);
         }
     }
 })();

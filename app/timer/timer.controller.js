@@ -21,9 +21,9 @@
         .module('TimingApp')
         .controller('TimerController', TimerController);
 
-    TimerController.$inject = ['$timeout', '$localStorage', 'timeConsts', 'settings'];
+    TimerController.$inject = ['$scope', '$timeout', '$localStorage', 'timeConsts', 'settings'];
 
-    function TimerController($timeout, $localStorage, timeConsts, settings) {
+    function TimerController($scope, $timeout, $localStorage, timeConsts, settings) {
         var vm = this;
         var ticker;
         vm.start = start;
@@ -59,7 +59,7 @@
                 onTick();
             }
 
-            onTick();
+            $scope.$on('$destroy', destroyHandler);
         }
 
         function isPauseDisabled() {
@@ -138,6 +138,10 @@
         function restart() {
             vm.stop();
             vm.start();
+        }
+
+        function destroyHandler() {
+            $timeout.cancel(ticker);
         }
     }
 })();
