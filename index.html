@@ -10,23 +10,26 @@
 <body>
     <md-tabs md-dynamic-height md-border-bottom md-center-tabs>
         <md-tab label="Stopwatch">
-            <md-content ng-controller="StopwatchController" ng-init="onTick()">
+            <md-content ng-controller="StopwatchController as stopwatch">
                 <div layout="row" layout-wrap>
                     <div flex="60" offset="20">
                         <div layout="column">
                             <div layout="row">
-                                <md-button ng-disabled="storage.started && !storage.paused" ng-click="start()" class="md-icon-button">
+                                <md-button ng-disabled="stopwatch.isStartDisabled()" ng-click="stopwatch.start()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-play.svg"></md-icon>
                                 </md-button>
-                                <md-button ng-disabled="!storage.started || storage.paused" ng-click="pause()" class="md-icon-button">
+                                <md-button ng-disabled="stopwatch.isPauseDisabled()" ng-click="stopwatch.pause()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-pause.svg"></md-icon>
                                 </md-button>
-                                <md-button ng-disabled="!storage.started" ng-click="restart()" class="md-icon-button">
+                                <md-button ng-disabled="stopwatch.isRestartDisabled()" ng-click="stopwatch.restart()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-restart.svg"></md-icon>
                                 </md-button>
                             </div>
                             <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
-                                <span flex>{{storage.hours}} </span> <span flex>{{storage.minutes}} </span> <span flex>{{storage.seconds}} </span> <span flex>{{storage.milliseconds}} </span>
+                                <span flex>{{stopwatch.storage.stopwatch_hours}} </span>
+                                <span flex>{{stopwatch.storage.stopwatch_minutes}} </span>
+                                <span flex>{{stopwatch.storage.stopwatch_seconds}} </span>
+                                <span flex>{{stopwatch.storage.stopwatch_milliseconds}} </span>
                             </md-whiteframe>
                         </div>
                     </div>
@@ -35,40 +38,43 @@
         </md-tab>
 
         <md-tab label="Timer">
-            <md-content ng-controller="TimerController" ng-init="onTick()">
+            <md-content ng-controller="TimerController as timing">
                 <div layout="row" layout-wrap>
                     <div flex="60" offset="20">
                         <div layout="column">
                             <div layout="row">
-                                <md-button ng-disabled="storage.timer_started && !storage.timer_paused" ng-click="start()" class="md-icon-button">
+                                <md-button ng-disabled="timing.isStartDisabled()" ng-click="timing.start()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-play.svg"></md-icon>
                                 </md-button>
-                                <md-button ng-disabled="!storage.timer_started || storage.timer_paused" ng-click="pause()" class="md-icon-button">
+                                <md-button ng-disabled="timing.isPauseDisabled()" ng-click="timing.pause()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-pause.svg"></md-icon>
                                 </md-button>
-                                <md-button ng-disabled="!storage.timer_started" ng-click="restart()" class="md-icon-button">
+                                <md-button ng-disabled="timing.isRestartDisabled()" ng-click="timing.restart()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-restart.svg"></md-icon>
                                 </md-button>
                                 <md-input-container flex>
                                     <label>Hours</label>
-                                    <input ng-disabled="storage.timer_started" ng-model="storage.timer_ihours">
+                                    <input ng-disabled="timing.storage.timer_started" ng-model="timing.storage.timer_ihours">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Minutes</label>
-                                    <input ng-disabled="storage.timer_started" ng-model="storage.timer_iminutes">
+                                    <input ng-disabled="timing.storage.timer_started" ng-model="timing.storage.timer_iminutes">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Seconds</label>
-                                    <input ng-disabled="storage.timer_started" ng-model="storage.timer_iseconds">
+                                    <input ng-disabled="timing.storage.timer_started" ng-model="timing.storage.timer_iseconds">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Milliseconds</label>
-                                    <input ng-disabled="storage.timer_started" ng-model="storage.timer_imilliseconds">
+                                    <input ng-disabled="timing.storage.timer_started" ng-model="timing.storage.timer_imilliseconds">
                                 </md-input-container>
                             </div>
-                            <md-progress-linear md-mode="determinate" value="{{100*(storage.timer_initialValue - storage.timer_counter)/storage.timer_initialValue}}"></md-progress-linear>
+                            <md-progress-linear md-mode="determinate" value="{{100*(timing.storage.timer_initialValue - timing.storage.timer_counter)/timing.storage.timer_initialValue}}"></md-progress-linear>
                             <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
-                                <span flex>{{storage.timer_hours}} </span> <span flex>{{storage.timer_minutes}} </span> <span flex>{{storage.timer_seconds}} </span> <span flex>{{storage.timer_milliseconds}} </span>
+                                <span flex>{{timing.storage.timer_hours}} </span>
+                                <span flex>{{timing.storage.timer_minutes}} </span>
+                                <span flex>{{timing.storage.timer_seconds}} </span>
+                                <span flex>{{timing.storage.timer_milliseconds}} </span>
                             </md-whiteframe>
                         </div>
                     </div>
@@ -77,40 +83,43 @@
         </md-tab>
 
         <md-tab label="Alarm">
-            <md-content ng-controller="AlarmController" ng-init="onTick()">
+            <md-content ng-controller="AlarmController as alarm">
                 <div layout="row" layout-wrap>
                     <div flex="60" offset="20">
                         <div layout="column">
                             <div layout="row">
-                                <md-button ng-disabled="storage.alarm_started && !storage.alarm_paused" ng-click="start()" class="md-icon-button">
+                                <md-button ng-disabled="alarm.isStartDisabled()" ng-click="alarm.start()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-play.svg"></md-icon>
                                 </md-button>
-                                <md-button ng-disabled="!storage.alarm_started || storage.alarm_paused" ng-click="pause()" class="md-icon-button">
+                                <md-button ng-disabled="alarm.isPauseDisabled()" ng-click="alarm.pause()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-pause.svg"></md-icon>
                                 </md-button>
-                                <md-button ng-disabled="!storage.alarm_started" ng-click="restart()" class="md-icon-button">
+                                <md-button ng-disabled="alarm.isRestartDisabled()" ng-click="alarm.restart()" class="md-icon-button">
                                     <md-icon md-svg-src="assets/img/icon-restart.svg"></md-icon>
                                 </md-button>
                                 <md-input-container flex>
                                     <label>Hours</label>
-                                    <input ng-disabled="storage.alarm_started" ng-model="storage.alarm_ihours">
+                                    <input ng-disabled="alarm.storage.alarm_started" ng-model="alarm.storage.alarm_ihours">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Minutes</label>
-                                    <input ng-disabled="storage.alarm_started" ng-model="storage.alarm_iminutes">
+                                    <input ng-disabled="alarm.storage.alarm_started" ng-model="alarm.storage.alarm_iminutes">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Seconds</label>
-                                    <input ng-disabled="storage.alarm_started" ng-model="storage.alarm_iseconds">
+                                    <input ng-disabled="alarm.storage.alarm_started" ng-model="alarm.storage.alarm_iseconds">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Milliseconds</label>
-                                    <input ng-disabled="storage.alarm_started" ng-model="storage.alarm_imilliseconds">
+                                    <input ng-disabled="alarm.storage.alarm_started" ng-model="alarm.storage.alarm_imilliseconds">
                                 </md-input-container>
                             </div>
-                            <md-progress-linear md-mode="determinate" value="{{100*(storage.alarm_initialValue - storage.alarm_counter)/storage.alarm_initialValue}}"></md-progress-linear>
+                            <md-progress-linear md-mode="determinate" value="{{100*(alarm.storage.alarm_initialValue - alarm.storage.alarm_counter)/alarm.storage.alarm_initialValue}}"></md-progress-linear>
                             <md-whiteframe class="md-display-2 md-whiteframe-z5" layout="row">
-                                <span flex>{{storage.alarm_hours}} </span> <span flex>{{storage.alarm_minutes}} </span> <span flex>{{storage.alarm_seconds}} </span> <span flex>{{storage.alarm_milliseconds}} </span>
+                                <span flex>{{alarm.storage.alarm_hours}} </span>
+                                <span flex>{{alarm.storage.alarm_minutes}} </span>
+                                <span flex>{{alarm.storage.alarm_seconds}} </span>
+                                <span flex>{{alarm.storage.alarm_milliseconds}} </span>
                             </md-whiteframe>
                         </div>
                     </div>
@@ -127,7 +136,11 @@
     <script src="assets/js/angular-material.min.js"></script>
     <!-- ngStorage for Angular -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
-    <script src="js/scripts.js"></script>
+    <!-- Angular components -->
+    <script src="app/app.module.js"></script>
+    <script src="app/timer/stopwatch.controller.js"></script>
+    <script src="app/timer/timer.controller.js"></script>
+    <script src="app/timer/alarm.controller.js"></script>
 </body>
 
 </html>
